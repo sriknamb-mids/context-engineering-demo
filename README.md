@@ -21,13 +21,15 @@ The examples target project `databryte` and dataset `context_engineering_demo`. 
 bq query --project_id=databryte --use_legacy_sql=false < bigquery/setup.sql
 ```
 
-Then run the sample workload as the same Google account you connect to Context Layer:
+Then run each sample query separately as the same Google account you connect to Context Layer. This creates three distinct BigQuery query jobs:
 
 ```sh
-bq query --project_id=databryte --use_legacy_sql=false < bigquery/workload.sql
+for query in bigquery/queries/*.sql; do
+  bq query --project_id=databryte --use_legacy_sql=false < "$query"
+done
 ```
 
-BigQuery query history is recorded as jobs, not as rows in a table. Context Layer reads recent jobs from the selected BigQuery project, so run this workload in `databryte` under your connected account. Job history visibility depends on the permissions granted to that account.
+BigQuery query history is recorded as jobs, not as rows in a table. Context Layer reads recent jobs from the selected BigQuery project, so run these queries in `databryte` under your connected account. Job history visibility depends on the permissions granted to that account. [`workload.sql`](bigquery/workload.sql) contains the same queries in one script for convenience, but running that script creates a single job.
 
 ## Add the demo in Context Layer
 
